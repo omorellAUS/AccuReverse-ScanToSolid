@@ -49,7 +49,7 @@ double compute_hausdorff(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, TopoDS_Solid
     pcl::KdTreeFLANN<pcl::PointXYZ> kd;
     kd.setInputCloud(cloud);
     std::vector<double> distances;
-    // Placeholder: Implement point-to-surface distance using BRep_Tool::Surface
+    // Placeholder: Implement point-to-surface distance
     return *std::max_element(distances.begin(), distances.end());
 }
 
@@ -63,7 +63,7 @@ std::vector<pcl::PointIndices> segment_cloud(pcl::PointCloud<pcl::PointXYZ>::Ptr
         float major_axis, minor_axis;
         feature.getAABB(major_axis, minor_axis);
         if (major_axis / minor_axis > 5) effective_hint = "shaft";
-        else if (has_periodic_curvature(cloud)) effective_hint = "gear";
+        else if (has_periodic_curvature(cloud)) effective_hint = "gear";  // Placeholder
         else effective_hint = "freeform";
     }
     if (effective_hint == "gear" || effective_hint == "pinion") {
@@ -90,7 +90,7 @@ std::vector<pcl::PointIndices> segment_cloud(pcl::PointCloud<pcl::PointXYZ>::Ptr
 }
 
 opencascade::handle<Geom_Surface> fit_surface(pcl::PointCloud<pcl::PointXYZ>::Ptr seg_cloud, const std::string& shape_hint, double tol) {
-    // Placeholder: Implement cylinder/NURBS fitting with 0.01mm buffer
+    // Placeholder: Implement cylinder/NURBS fitting
     return handle<Geom_Surface>();
 }
 
