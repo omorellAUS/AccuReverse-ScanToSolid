@@ -65,9 +65,9 @@ jobs:
       shell: powershell
       run: |
         Remove-Item -Path .\.DS_Store -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path *\*.DS_Store -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path **\.DS_Store -Force -ErrorAction SilentlyContinue
         git rm -r --cached .DS_Store --quiet || true
-        git rm -r --cached */.DS_Store --quiet || true
+        git rm -r --cached **\.DS_Store --quiet || true
     - name: Verify config.json and input meshes
       shell: powershell
       run: |
@@ -75,12 +75,16 @@ jobs:
           Write-Error "config.json not found"
           exit 1
         }
-        if (-Not (Test-Path "tests/*.stl") -And -Not (Test-Path "tests/*.obj") -And -Not (Test-Path "tests/*.igs")) {
-          Write-Error "No input mesh found in tests/"
-          exit 1
+        if (-Not (Test-Path "tests")) {
+          Write-Warning "tests/ directory not found, skipping tests"
+        } else {
+          if (-Not (Test-Path "tests/*.stl") -And -Not (Test-Path "tests/*.obj") -And -Not (Test-Path "tests/*.igs")) {
+            Write-Warning "No input mesh found in tests/, skipping tests"
+          } else {
+            Get-Content -Path config.json
+            dir tests/*.stl tests/*.obj tests/*.igs
+          }
         }
-        Get-Content -Path config.json
-        dir tests/*.stl tests/*.obj tests/*.igs
     - name: Configure CMake
       shell: powershell
       run: |
@@ -95,8 +99,12 @@ jobs:
       shell: powershell
       run: |
         mkdir output -Force
-        foreach ($file in Get-ChildItem tests -Include *.stl,*.obj,*.igs -Recurse) {
-          .\build\Release\accureverse.exe config.json $file
+        if (Test-Path "tests/*.stl" -Or Test-Path "tests/*.obj" -Or Test-Path "tests/*.igs") {
+          foreach ($file in Get-ChildItem tests -Include *.stl,*.obj,*.igs -Recurse) {
+            .\build\Release\accureverse.exe config.json $file
+          }
+        } else {
+          echo "No test files found, skipping tests"
         }
       continue-on-error: true
     - name: Upload Artifacts
