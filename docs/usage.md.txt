@@ -1,0 +1,5 @@
+# Usage
+- For "any" mode: Auto-analyzes dimensions (bounding box, curvature) to apply primitives/NURBS.
+- Inputs: .stl, .obj, .igs (loads via OpenCASCADE reader).
+- Fusion 360: Import .step/.iges as solids for editing; meshes follow surfaces/edges with 0.02mm accuracy (0.01mm buffer in tessellation).
+- Run benchmarks: `./benchmarks/run_benchmarks.sh`

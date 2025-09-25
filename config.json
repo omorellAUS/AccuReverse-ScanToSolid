@@ -1,0 +1,9 @@
+{
+  "shape_hint": "any",
+  "tolerance_mm": 0.02,
+  "buffer_mm": 0.01,
+  "target_triangles_min": 100,
+  "target_triangles_max": 1000,
+  "input_mesh": "tests/gear.stl",
+  "output_dir": "output"
+}
