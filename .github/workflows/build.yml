@@ -49,10 +49,10 @@ jobs:
         if (Test-Path vcpkg) {
           Remove-Item -Path vcpkg -Recurse -Force
         }
-        git clone https://github.com/microsoft/vcpkg.git
+        git clone --no-single-branch --depth 1000 https://github.com/microsoft/vcpkg.git
         if ($LASTEXITCODE -ne 0) { exit 1 }
         cd vcpkg
-        git fetch --tags
+        git fetch --all
         git checkout 2024.10.21
         if ($LASTEXITCODE -ne 0) { exit 1 }
         .\bootstrap-vcpkg.bat
@@ -142,7 +142,7 @@ jobs:
     - name: Configure CMake
       shell: powershell
       run: |
-        cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_BUILD_TYPE=Release
+        cmake -B build -S . -CMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -CMAKE_BUILD_TYPE=Release
         if ($LASTEXITCODE -ne 0) { exit 1 }
     - name: Build
       shell: powershell
@@ -201,9 +201,9 @@ jobs:
         if [ -d "vcpkg" ]; then
           rm -rf vcpkg
         fi
-        git clone https://github.com/microsoft/vcpkg.git
+        git clone --no-single-branch --depth 1000 https://github.com/microsoft/vcpkg.git
         cd vcpkg
-        git fetch --tags
+        git fetch --all
         git checkout 2024.10.21
         ./bootstrap-vcpkg.sh
         ./vcpkg integrate install
