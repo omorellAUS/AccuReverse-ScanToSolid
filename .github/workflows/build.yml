@@ -111,8 +111,9 @@ jobs:
       run: |
         Remove-Item -Path .\.DS_Store -Force -ErrorAction SilentlyContinue
         Remove-Item -Path **\.DS_Store -Force -ErrorAction SilentlyContinue
-        git rm -r --cached .DS_Store -Force -ErrorAction SilentlyContinue
-        git rm -r --cached **\.DS_Store -Force -ErrorAction SilentlyContinue
+        git rm -r --cached .DS_Store -f || true
+        git rm -r --cached **/.DS_Store -f || true
+        git commit -m "Remove .DS_Store files" || echo "No changes to commit"
     - name: Verify config.json and input meshes
       shell: powershell
       run: |
@@ -165,7 +166,7 @@ jobs:
         if-no-files-found: warn
   build-macos:
     needs: install-deps
-    runs-on: macos-12  # High Sierra-compatible
+    runs-on: macos-12 # High Sierra-compatible
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
