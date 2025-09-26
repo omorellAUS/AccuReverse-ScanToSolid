@@ -46,16 +46,23 @@ jobs:
     - name: Setup vcpkg
       shell: powershell
       run: |
+        if (Test-Path vcpkg) {
+          Remove-Item -Path vcpkg -Recurse -Force
+        }
         git clone https://github.com/microsoft/vcpkg.git
+        if ($LASTEXITCODE -ne 0) { exit 1 }
         cd vcpkg
         git checkout 9a98f93671f984351377044210854900bfd73171
+        if ($LASTEXITCODE -ne 0) { exit 1 }
         .\bootstrap-vcpkg.bat
+        if ($LASTEXITCODE -ne 0) { exit 1 }
         cd ..
     - name: Install dependencies with vcpkg
       shell: powershell
       if: steps.cache-vcpkg.outputs.cache-hit != 'true'
       run: |
         .\vcpkg\vcpkg.exe install --triplet x64-windows-static
+        if ($LASTEXITCODE -ne 0) { exit 1 }
       env:
         VCPKG_DEFAULT_TRIPLET: x64-windows-static
       continue-on-error: false
@@ -190,6 +197,9 @@ jobs:
         cmake --version
     - name: Setup vcpkg
       run: |
+        if [ -d "vcpkg" ]; then
+          rm -rf vcpkg
+        fi
         git clone https://github.com/microsoft/vcpkg.git
         cd vcpkg
         git checkout 9a98f93671f984351377044210854900bfd73171
