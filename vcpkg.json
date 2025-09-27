@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "accureverse-scantosolid",
   "version-string": "0.1.0",
-  "builtin-baseline": "4a9b5739c6e14f7f85f5f5e4a9d8e14b4f0e4f0e",
+  "builtin-baseline": "f6e3d8b8a0e3f1c2b4a5e6f7d8e9a0b1c2d3e4f5",
   "dependencies": [
     {
       "name": "nlohmann-json",
